@@ -214,6 +214,7 @@ export default class ChampionvView extends Component<
   }
 
   public addDevice(data: ChampList, saved: any) {
+    console.log(`Adding ${JSON.stringify(data)}`);
     if (saved === "false") {
       if ((data.type == "" || data.type == "Select Event Type")) {
         this.setState({ showValidationError: true, validationError: LocaleStrings.EventTypeValidationMessage });
@@ -310,6 +311,7 @@ export default class ChampionvView extends Component<
       let item1 = tmp.filter((i) => i.Id === link.eventid);
       let seventid = String(link.eventid);
       let smemberid = String(link.memberid);
+      let scomments = link.Comments;
       let sdoe = link.DateOfEvent;
       let stype = link.type;
       let spoints = link.Count * 10;
@@ -325,6 +327,7 @@ export default class ChampionvView extends Component<
           Title: stype,
           EventId: seventid,
           MemberId: smemberid,
+          Comments: scomments,
           DateofEvent: sdoe,
           Count: scount,
           MemberName: sMemberName,
@@ -590,9 +593,10 @@ export default class ChampionvView extends Component<
   }
 
   public handleComments = (evt: any) => {
-    let ca: string = evt.target.outerText;
+    console.log("Handling comment from " + evt.target.value);
+    let c: string = evt.target.value;
     this.setState({
-      Comments: ca
+      Comments: c
     });
   }
 
@@ -664,100 +668,102 @@ export default class ChampionvView extends Component<
                     {LocaleStrings.RecordEventLabel}
                   </Accordion.Toggle>
                   <Accordion.Collapse eventKey="1">
-                    <Card.Body className="cb">
+                    <Card.Body className="cb p-1">
                       <div className="form-fields">
                         <div className="form-data">
-                          <div className="form-group row">
-                            <DatePicker
-                              label={LocaleStrings.MonthAndDateLabel}
-                              className={cx(
-                                controlClass.control,
-                                "col-md-4",
-                                "date",
-                                controlClass.marginAuto,
-                                controlClass.paddingRight,
-                              )}
-                              firstDayOfWeek={firstDayOfWeek}
-                              strings={DayPickerStrings}
-                              showWeekNumbers={true}
-                              firstWeekOfYear={1}
-                              showMonthPickerAsOverlay={true}
-                              placeholder="Select a date..."
-                              ariaLabel="Select a date"
-                              onSelectDate={this.onChange}
-                              value={this.state.DateOfEvent}
-                              styles={{ callout: { selectors: { '& .ms-DatePicker-day--outfocus': { color: "#757575" } } } }}
-                            />
-                            <div
-                              className={cx(
-                                "col-md-6",
+                          <div className="form-group">
+                            <div className="row ml-1 mr-1">
+                              <DatePicker
+                                label={LocaleStrings.MonthAndDateLabel}
+                                className={cx(
+                                  controlClass.control,
+                                  "col-md-4",
+                                  "date",
+                                  controlClass.marginAuto,
+                                  controlClass.paddingRight,
+                                )}
+                                firstDayOfWeek={firstDayOfWeek}
+                                strings={DayPickerStrings}
+                                showWeekNumbers={true}
+                                firstWeekOfYear={1}
+                                showMonthPickerAsOverlay={true}
+                                placeholder="Select a date..."
+                                ariaLabel="Select a date"
+                                onSelectDate={this.onChange}
+                                value={this.state.DateOfEvent}
+                                styles={{ callout: { selectors: { '& .ms-DatePicker-day--outfocus': { color: "#757575" } } } }}
+                              />
+                              <div
+                                className={cx(
+                                  "col-md-6",
+                                  controlClass.marginAuto,
+                                  controlClass.paddingRight
+                                )}>
+                                <Dropdown
+                                  label={LocaleStrings.EventTypeGridLabel}
+                                  placeholder={LocaleStrings.EventTypeGridLabelPlaceHolder}
+                                  onChange={(evt) => this.handleSelect(evt)}
+                                  id="drp"
+                                  options={this.options()}
+                                  onRenderCaretDown={onRenderCaretDown}
+                                  styles={{ title: { color: "#757575" } }}
+                                />
+                              </div>
+                              <div className={cx(
+                                "col-md-2",
                                 controlClass.marginAuto,
                                 controlClass.paddingRight
                               )}>
-                              <Dropdown
-                                label={LocaleStrings.EventTypeGridLabel}
-                                placeholder={LocaleStrings.EventTypeGridLabelPlaceHolder}
-                                onChange={(evt) => this.handleSelect(evt)}
-                                id="drp"
-                                options={this.options()}
-                                onRenderCaretDown={onRenderCaretDown}
-                                styles={{ title: { color: "#757575" } }}
-                              />
+                                <TextField
+                                  label={LocaleStrings.CountLabel}
+                                  value={this.state.points.toString()}
+                                  onChange={this.setPoints}
+                                  id="inputPoints"
+                                  type="number"
+                                  min="1"
+                                  max="5"
+                                />
+                              </div>
+                              
                             </div>
-                            <div className={cx(
-                              "col-md-2",
-                              controlClass.marginAuto,
-                              controlClass.paddingRight
-                            )}>
-                              <TextField
-                                label={LocaleStrings.CountLabel}
-                                value={this.state.points.toString()}
-                                onChange={this.setPoints}
-                                id="inputPoints"
-                                type="number"
-                                min="1"
-                                max="5"
-                              />
-                            </div>
-                            
-                          </div>
-                          <div className="form-group row">
-                            <div className={cx(
-                              "col-md-11",
-                              controlClass.marginAuto,
-                              controlClass.paddingRight
-                            )}>
-                              <TextField
-                                label="Comments"
-                                placeholder="How did you finish this event?"
-                                onChange={(evt) => this.handleComments(evt)}
-                                id="inputComments"
-                                type="text"
-                                multiline={true}
-                              />
-                            </div>
-                            
-                            <div className={cx(
-                              "col-md-1",
-                              controlClass.marginTopAuto,
-                            )}>
-                              <Icon iconName="CircleAdditionSolid" className="AddEventIcon"
-                                onClick={(_e) =>
-                                  this.addDevice(
-                                    {
-                                      id: 0,
-                                      type: this.state.type,
-                                      eventid: this.state.eventid,
-                                      memberid: this.state.memberid,
-                                      Comments: this.state.Comments,
-                                      Count: this.state.points,
-                                      DateOfEvent: this.state.DateOfEvent,
-                                      MemberName: "test",
-                                      EventName: "evtest",
-                                    },
-                                    "false"
-                                  )
-                                } />
+                            <div className="row ml-1 mr-1">
+                              <div className={cx(
+                                "col-md-11",
+                                controlClass.marginAuto,
+                                controlClass.paddingRight
+                              )}>
+                                <TextField
+                                  label="Comments"
+                                  placeholder="How did you finish this event?"
+                                  onChange={(evt) => this.handleComments(evt)}
+                                  id="inputComments"
+                                  type="text"
+                                  multiline={true}
+                                />
+                              </div>
+                              
+                              <div className={cx(
+                                "col-md-1 mb-3",
+                                controlClass.marginTopAuto,
+                              )}>
+                                <Icon iconName="CircleAdditionSolid" className="AddEventIcon"
+                                  onClick={(_e) =>
+                                    this.addDevice(
+                                      {
+                                        id: 0,
+                                        type: this.state.type,
+                                        eventid: this.state.eventid,
+                                        memberid: this.state.memberid,
+                                        Comments: this.state.Comments,
+                                        Count: this.state.points,
+                                        DateOfEvent: this.state.DateOfEvent,
+                                        MemberName: "test",
+                                        EventName: "evtest",
+                                      },
+                                      "false"
+                                    )
+                                  } />
+                              </div>
                             </div>
                           </div>
                           <div>
@@ -767,7 +773,7 @@ export default class ChampionvView extends Component<
                               </span>
                             }
                           </div>
-                          <div className="row">
+                          <div className="row ml-1 mr-1">
                             <div>
                               {this.state.collectionNew.map((item) => (
                                 <Row className="mt-5 row-margin" key={item.eventid}>
