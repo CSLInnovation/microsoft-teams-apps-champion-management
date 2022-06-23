@@ -105,6 +105,10 @@
           "type": "number"
         },
         {
+          "name": "Comments",
+          "type": "text"
+        },
+        {
           "name": "DateofEvent",
           "type": "dateTime"
         },

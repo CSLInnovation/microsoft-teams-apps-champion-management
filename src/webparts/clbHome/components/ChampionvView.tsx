@@ -128,6 +128,7 @@ export interface ChampionViewState {
   memberid: number;
   points: number;
   DateOfEvent: Date;
+  Comments: string;
   collection: Array<ChampList>;
   collectionNew: Array<ChampList>;
   edetails: Array<string>;
@@ -150,6 +151,7 @@ export interface ChampList {
   type: string;
   eventid: number;
   memberid: number;
+  Comments: string;
   Count: number;
   DateOfEvent: any;
   MemberName: string;
@@ -186,6 +188,7 @@ export default class ChampionvView extends Component<
       eventid: 0,
       memberid: 0,
       points: 1,
+      Comments: "",
       DateOfEvent: new Date(),
       collection: [],
       collectionNew: [],
@@ -438,6 +441,7 @@ export default class ChampionvView extends Component<
               type: responseJSON.value[i].Title,
               eventid: responseJSON.value[i].EventId,
               memberid: memberid,
+              Comments: responseJSON.value[i].Comments,
               Count: responseJSON.value[i].Count,
               DateOfEvent: responseJSON.value[i].DateofEvent,
               MemberName: responseJSON.value[i].MemberName,
@@ -528,6 +532,7 @@ export default class ChampionvView extends Component<
                               type: responseJSON.value[i].Title,
                               eventid: responseJSON.value[i].EventId,
                               memberid: memberid,
+                              Comments: responseJSON.value[i].Comments,
                               Count: responseJSON.value[i].Count,
                               DateOfEvent: responseJSON.value[i].DateofEvent,
                               MemberName: responseJSON.value[i].MemberName,
@@ -582,6 +587,13 @@ export default class ChampionvView extends Component<
         memberid: localStorage["memberid"],
       });
     }
+  }
+
+  public handleComments = (evt: any) => {
+    let ca: string = evt.target.outerText;
+    this.setState({
+      Comments: ca
+    });
   }
 
   private setPoints(e: any): void {
@@ -678,7 +690,7 @@ export default class ChampionvView extends Component<
                             />
                             <div
                               className={cx(
-                                "col-md-5",
+                                "col-md-6",
                                 controlClass.marginAuto,
                                 controlClass.paddingRight
                               )}>
@@ -707,6 +719,24 @@ export default class ChampionvView extends Component<
                                 max="5"
                               />
                             </div>
+                            
+                          </div>
+                          <div className="form-group row">
+                            <div className={cx(
+                              "col-md-11",
+                              controlClass.marginAuto,
+                              controlClass.paddingRight
+                            )}>
+                              <TextField
+                                label="Comments"
+                                placeholder="How did you finish this event?"
+                                onChange={(evt) => this.handleComments(evt)}
+                                id="inputComments"
+                                type="text"
+                                multiline={true}
+                              />
+                            </div>
+                            
                             <div className={cx(
                               "col-md-1",
                               controlClass.marginTopAuto,
@@ -719,6 +749,7 @@ export default class ChampionvView extends Component<
                                       type: this.state.type,
                                       eventid: this.state.eventid,
                                       memberid: this.state.memberid,
+                                      Comments: this.state.Comments,
                                       Count: this.state.points,
                                       DateOfEvent: this.state.DateOfEvent,
                                       MemberName: "test",
