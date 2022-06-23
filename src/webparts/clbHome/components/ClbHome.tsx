@@ -451,6 +451,18 @@ export default class ClbHome extends React.Component<
                                   };
                                   listColumns.push(column);
                                   break;
+                                case "note":
+                                  column = {
+                                    name: element.name,
+                                    "text": {
+                                      "allowMultipleLines": true,
+                                      "appendChangesToExistingText": false,
+                                      "linesForEditing": 5,
+                                      "maxLength": 2000
+                                    }
+                                  };
+                                  listColumns.push(column);
+                                  break;
                                 case "choice":
                                   switch (element.name) {
                                     case "Region":
@@ -659,6 +671,18 @@ export default class ClbHome extends React.Component<
                                       name: element.name,
                                       text: {},
                                     };
+                                    listColumns.push(column);
+                                    break;
+                                    case "note":
+                                      column = {
+                                        name: element.name,
+                                        "text": {
+                                          "allowMultipleLines": true,
+                                          "appendChangesToExistingText": false,
+                                          "linesForEditing": 5,
+                                          "maxLength": 2000
+                                        }
+                                      };
                                     listColumns.push(column);
                                     break;
                                   case "choice":

@@ -35,6 +35,7 @@ const columns = [
   },
   { field: "type", headerName: LocaleStrings.EventTypeGridLabel, width: 150 },
   { field: "Count", type: 'number', headerName: LocaleStrings.CMPSideBarPointsLabel, width: 150 },
+  { field: "Comments", type: 'string', headerName: 'Comments', width: 250},
 ];
 const DayPickerStrings: IDatePickerStrings = {
   months: [
@@ -738,13 +739,14 @@ export default class ChampionvView extends Component<
                                   onChange={(evt) => this.handleComments(evt)}
                                   id="inputComments"
                                   type="text"
+                                  maxLength={2000}
                                   multiline={true}
                                 />
                               </div>
                               
                               <div className={cx(
-                                "col-md-1 mb-3",
-                                controlClass.marginTopAuto,
+                                "col-md-1",
+                                controlClass.marginAuto,
                               )}>
                                 <Icon iconName="CircleAdditionSolid" className="AddEventIcon"
                                   onClick={(_e) =>
